@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { nanoid } from 'nanoid';
 import ContactForm from './ContactForm';
 import ContactList from './ContactList';
+import Filter from './Filter';
 class App extends Component {
   state = {
     contacts: [
@@ -12,7 +13,20 @@ class App extends Component {
     ],
     filter: '',
   };
+
+  isDublicate(name) {
+    const normalizedName = name.toLowerCase();
+    const { contacts } = this.state;
+    const result = contacts.find(({ name }) => {
+      return name.toLowerCase() === normalizedName;
+    });
+    return Boolean(result);
+  }
   addContact = ({ name, number }) => {
+    if (this.isDublicate(name)) {
+      alert(`${name} is already in contacts`);
+      return false;
+    }
     const contact = {
       id: nanoid(),
       name: name,
@@ -24,15 +38,36 @@ class App extends Component {
     }));
     return true;
   };
+  changeFilter = event => {
+    this.setState({ filter: event.currentTarget.value });
+  };
+
+  getVisibleContacts = () => {
+    const { filter, contacts } = this.state;
+    const normalizedFilter = filter.toLocaleLowerCase();
+    return contacts.filter(contact =>
+      contact.name.toLocaleLowerCase().includes(normalizedFilter)
+    );
+  };
+  deleteContact = todoId => {
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(contact => contact.id !== todoId),
+    }));
+  };
 
   render() {
     const { contacts, filter } = this.state;
     return (
       <div>
         <h1>Phonebook</h1>
-        <ContactForm onSubmit />
+        <ContactForm onSubmit={this.addContact} />
         <h2>Contacts</h2>
-        <ContactList onDeleteContact={this.deleteContact} />
+        <div>All contacts: {contacts.length}</div>
+        <Filter value={filter} onChange={this.changeFilter} />
+        <ContactList
+          contacts={this.getVisibleContacts()}
+          onDeleteContact={this.deleteContact}
+        />
       </div>
     );
   }
