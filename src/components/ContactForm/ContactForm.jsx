@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import css from './ContactForm.module.css';
 
 class ContactForm extends Component {
   state = {
@@ -28,10 +29,11 @@ class ContactForm extends Component {
   };
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        <label>
+      <form className={css.form} onSubmit={this.handleSubmit}>
+        <label className={css.label}>
           Name
           <input
+            className={css.inputName}
             value={this.state.name}
             onChange={this.handleChange}
             type="text"
@@ -41,9 +43,10 @@ class ContactForm extends Component {
             required
           />
         </label>
-        <label>
+        <label className={css.label}>
           Number
           <input
+            className={css.inputNumber}
             value={this.state.number}
             onChange={this.handleChange}
             type="tel"
@@ -53,20 +56,11 @@ class ContactForm extends Component {
             required
           />
         </label>
-        <button type="submit">Add contact</button>
+        <button className={css.btnAddContact} type="submit">
+          Add contact
+        </button>
       </form>
     );
   }
 }
 export default ContactForm;
-
-// background-color: #00DBDE;
-// background-image: linear-gradient(180deg, #00DBDE 0%, #FC00FF 100%);
-
-// background - image: linear - gradient(109.6deg, rgba(238, 58, 136, 1) 11.2 %,
-//   rgba(128, 162, 245, 1) 91.1 % );
-
-// background-color: #00DBDE;
-// background-image: linear-gradient(0deg, #00DBDE 0%, #FC00FF 100%);
-
-// box-shadow: 0 60px 80px rgba(0,0,0,0.60), 0 45px 26px rgba(0,0,0,0.14);
